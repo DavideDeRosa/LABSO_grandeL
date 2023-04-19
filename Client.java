@@ -1,6 +1,11 @@
 import java.io.IOException;
 import java.net.Socket;
 
+/*
+    QUANDO CHIUDIAMO IL SERVER, I VARI CLIENT NON HANNO UN MESSAGGIO DI CHIUSURA O DI TERMINAZIONE DEL SERVIZIO. E' UNA COSA VOLUTA O VA FIXATA?
+    UNA VOLTA CHIUSO IL SERVER, MANDATI DUE MESSAGGI VIENE TERMINATO IL CLIENT. CAPIRE SE IL COMPORTAMENTO VA CAMBIATO.
+ */
+
 public class Client {
     public static void main(String[] args) {
         if (args.length < 2) {
