@@ -8,7 +8,7 @@ public class Client {
             return;
         }
 
-        String host = args[0];
+        String host = args[0]; // QUANDO DO UN IP VALIDO MA NON CON UN SERVER IN ASCOLTO IL PROGRAMMA NON FA NULLA, COME MAI?
         int port = Integer.parseInt(args[1]);
 
         try {
