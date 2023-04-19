@@ -19,4 +19,3 @@ public class Transaction {
         return "Data transazione: " + date + "\tAmmontare di denaro: " + amount + "\tAltro conto corrente: " + otherBankAccount;
     }
 }
- 

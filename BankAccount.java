@@ -56,6 +56,10 @@ public class BankAccount {
 
     @Override
     public String toString(){
-        return "Nome conto corrente: " + name + "\tBilancio: " + balance + "\tUltima transazione: " + lastTransaction + "\n\t";
+        if(lastTransaction == null){
+            return "Nome conto corrente: " + name + "\tBilancio: " + balance + "\tUltima transazione: nessuna transazione\n";
+        }else{
+            return "Nome conto corrente: " + name + "\tBilancio: " + balance + "\tUltima transazione: " + lastTransaction + "\n\t";
+        }
     }
 }
