@@ -58,8 +58,16 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "list":
-                        // PERCHE NON VA UN CICLO O UN ITERATOR SUL VECTOR?
-                            
+                           if(!bankAccounts.isEmpty()){
+                             String list = "";
+                            for (BankAccount b : bankAccounts) {
+                                list = list + b.toString();
+                            }
+
+                            to.println(list);
+                           }else{
+                            to.println("Lista vuota!");
+                           }
                             break;
                         case "transfer":
                             if (parts.length == 4) {

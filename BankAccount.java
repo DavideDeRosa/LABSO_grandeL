@@ -61,7 +61,7 @@ public class BankAccount {
         if(lastTransaction == null){
             return "Nome conto corrente: " + name + "\tBilancio: " + balance + "\tUltima transazione: nessuna transazione\n";
         }else{
-            return "Nome conto corrente: " + name + "\tBilancio: " + balance + "\tUltima transazione: " + lastTransaction + "\n\t";
+            return "Nome conto corrente: " + name + "\tBilancio: " + balance + "\tUltima transazione: " + lastTransaction + "\n";
         }
     }
 }
