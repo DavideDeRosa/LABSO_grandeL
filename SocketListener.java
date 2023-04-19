@@ -18,10 +18,10 @@ public class SocketListener implements Runnable {
             this.server.setSoTimeout(5000);
             while (!Thread.interrupted()) {
                 try {
-                    System.out.println("Waiting for a new client...");
+                    System.out.println("In attesa di un nuovo client..");
                     Socket s = this.server.accept();
                     if (!Thread.interrupted()) {
-                        System.out.println("Client connected");
+                        System.out.println("Client connesso");
                         Thread handlerThread = new Thread(new ClientHandler(s));
                         handlerThread.start();
                         this.children.add(handlerThread);
@@ -42,9 +42,9 @@ public class SocketListener implements Runnable {
             e.printStackTrace();
         }
 
-        System.out.println("Interrupting children...");
+        System.out.println("Interruzzione dei thread figli...");
         for (Thread child : this.children) {
-            System.out.println("Interrupting " + child + "...");
+            System.out.println("Interrotto " + child + "...");
             child.interrupt();
         }
 

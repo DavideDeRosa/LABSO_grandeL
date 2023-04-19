@@ -20,7 +20,7 @@ public class Server {
         */
 
         if (args.length < 1) {
-            System.err.println("Usage: java Server <port>");
+            System.err.println("Utilizzo: java Server <port>");
             return;
         }
 
@@ -44,7 +44,7 @@ public class Server {
             } catch (InterruptedException e) {
                 return;
             }
-            System.out.println("Main thread terminated.");
+            System.out.println("Main thread terminato.");
         } catch (IOException e) {
             System.err.println("IOException caught: " + e);
             e.printStackTrace();

@@ -4,7 +4,7 @@ import java.net.Socket;
 public class Client {
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: java Client <host> <port>");
+            System.err.println("Utilizzo: java Client <host> <port>");
             return;
         }
 
@@ -13,7 +13,7 @@ public class Client {
 
         try {
             Socket s = new Socket(host, port);
-            System.out.println("Connected to server");
+            System.out.println("Connesso al server");
 
             System.out.println("Benvenuto nel servizio bancario grandeL!");
 
@@ -33,7 +33,7 @@ public class Client {
                 sender.join();
                 receiver.join();
                 s.close();
-                System.out.println("Socket closed.");
+                System.out.println("Socket chiuso.");
             } catch (InterruptedException e) {
                 /*
                  * se qualcuno interrompe questo thread nel frattempo, terminiamo

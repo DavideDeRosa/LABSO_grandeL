@@ -28,7 +28,7 @@ public class Receiver implements Runnable {
             System.err.println("IOException caught: " + e);
             e.printStackTrace();
         } finally {
-            System.out.println("Receiver closed.");
+            System.out.println("Receiver chiuso.");
             this.sender.interrupt();
         }
     }

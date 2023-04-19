@@ -33,7 +33,7 @@ public class Sender implements Runnable {
                     break;
                 }
             }
-            System.out.println("Sender closed.");
+            System.out.println("Sender chiuso.");
         } catch (IOException e) {
             System.err.println("IOException caught: " + e);
             e.printStackTrace();

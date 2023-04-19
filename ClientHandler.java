@@ -20,13 +20,13 @@ public class ClientHandler implements Runnable {
             Scanner from = new Scanner(s.getInputStream());
             PrintWriter to = new PrintWriter(s.getOutputStream(), true);
 
-            System.out.println("Thread " + Thread.currentThread() + " listening...");
+            System.out.println("Thread " + Thread.currentThread() + " in ascolto...");
 
             boolean closed = false;
             while (!closed) {
                 String request = from.nextLine();
                 if (!Thread.interrupted()) {
-                    System.out.println("Request: " + request);
+                    System.out.println("Richiesta: " + request);
                     String[] parts = request.split(" ");
                     switch (parts[0]) {
                         case "quit":
@@ -80,8 +80,11 @@ public class ClientHandler implements Runnable {
                                 to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
                             }
                             break;
+                        case "transfer_i":
+                                
+                                break;
                         default:
-                            to.println("Unknown cmd");
+                            to.println("Comando sconosciuto! Scrivere 'help' per ulteriori informazioni.");
                     }
                 } else {
                     to.println("quit");
@@ -91,7 +94,7 @@ public class ClientHandler implements Runnable {
 
             to.println("quit");
             s.close();
-            System.out.println("Closed");
+            System.out.println("Terminato");
         } catch (IOException e) {
             System.err.println("ClientHandler: IOException caught: " + e);
             e.printStackTrace();
