@@ -8,12 +8,10 @@ public class ClientHandler implements Runnable {
 
     Socket s;
     private Vector<BankAccount> bankAccounts;
-    private String accountsList;
 
     public ClientHandler(Socket s) {
         this.s = s;
         bankAccounts = new Vector<BankAccount>();
-        accountsList = "";
     }
 
     @Override
@@ -45,7 +43,6 @@ public class ClientHandler implements Runnable {
                                     to.println("Account creato!\tNome: " + accountName + "\tBilancio iniziale: " + accountAmount);
                                     BankAccount b = new BankAccount(accountName, accountAmount);
                                     bankAccounts.add(b);
-                                    accountsList = accountsList + b.toString();
                                 }else{
                                     to.println("Esiste già un conto con questo nome! Conto non creato correttamente.");
                                 }
@@ -54,12 +51,27 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "list":
-                        // PERCHE NON VA UN CICLO O UN ITERATOR SUL VECTOR? CHIEDERE AL PROF (metodo concatenare stringhe in questo modo
-                        // non permette di fare il punto opzionale per rimuovere un conto corrente)
-                            if(!bankAccounts.isEmpty()){
-                                to.println(accountsList);
-                            }else{
-                                to.println("Lista vuota!");
+                        // PERCHE NON VA UN CICLO O UN ITERATOR SUL VECTOR?
+                            
+                            break;
+                        case "transfer":
+                            if (parts.length == 4) {
+                                double amount = Double.parseDouble(parts[1]);
+                                String name1 = parts[2];
+                                String name2 = parts[3];
+                                BankAccount b1 = getAccountByName(name1.toLowerCase());
+                                BankAccount b2 = getAccountByName(name2.toLowerCase());
+                                if(b1 == null || b2 == null){
+                                    to.println("Uno dei due conti o entrambi i conti non sono corretti!");
+                                }else{
+                                    if(b1.transfer(amount, b2)){
+                                        to.println("Operazione effettuata con successo! Trasferiti " + amount + " dal conto " + name1 + " al conto " + name2 + "!");
+                                    }else{
+                                        to.println("Transazione negata, bilancio non sufficiente al trasferimento!");
+                                    }   
+                                }
+                            } else {
+                                to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
                             }
                             break;
                         default:
@@ -87,6 +99,15 @@ public class ClientHandler implements Runnable {
             }
         }
         return false;
+    }
+
+    private BankAccount getAccountByName(String name){
+        for (BankAccount b : bankAccounts) {
+            if(b.getName().toLowerCase().equals(name)){
+                return b;
+            }
+        }
+        return null;
     }
 
 }

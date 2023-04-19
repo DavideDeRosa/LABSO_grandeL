@@ -13,15 +13,17 @@ public class BankAccount {
         transactions = new Vector<Transaction>();
     }
 
-    public void transfer(double amount, BankAccount b){
+    public boolean transfer(double amount, BankAccount b){
         if(balance >= amount){
             balance = balance - amount;
             b.setBalance(b.getBalance() + amount);
             this.addTransaction(new Transaction(-(amount), b.getName()));   //AMMONTARE IN VALORE ASSOLUTO O DECIDIAMO DI TENERE NEGATIVO PER CHI FA IL TRASFERIMENTO?
             System.out.println("Transazione effettuata da " + name + ": " + lastTransaction);
             b.addTransaction(new Transaction(amount, this.getName()));
+            return true;
         }else{
             System.out.println("Transazione negata, bilancio non sufficiente al trasferimento!");
+            return false;
         }
     }
 
