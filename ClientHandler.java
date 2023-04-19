@@ -7,11 +7,11 @@ import java.util.Vector;
 public class ClientHandler implements Runnable {
 
     Socket s;
-    private Vector<BankAccount> bankAccounts;
+    Vector<BankAccount> bankAccounts;
 
     public ClientHandler(Socket s) {
         this.s = s;
-        bankAccounts = new Vector<BankAccount>();
+        bankAccounts = SocketListener.getBankAccounts();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ClientHandler implements Runnable {
                             break;
                         case "list":
                            if(!bankAccounts.isEmpty()){
-                             String list = "";
+                            String list = "";
                             for (BankAccount b : bankAccounts) {
                                 list = list + b.toString();
                             }

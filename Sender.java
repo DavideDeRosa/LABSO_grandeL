@@ -19,15 +19,10 @@ public class Sender implements Runnable {
             PrintWriter to = new PrintWriter(this.s.getOutputStream(), true);
             while (true) {
                 String request = userInput.nextLine();
-                /*
-                 * se il thread è stato interrotto mentre leggevamo l'input da tastiera, inviamo
-                 * "quit" al server e usciamo
-                 */
                 if (Thread.interrupted()) {
                     to.println("quit");
                     break;
                 }
-                /* in caso contrario proseguiamo e analizziamo l'input inserito */
                 to.println(request);
                 if (request.equals("quit")) {
                     break;

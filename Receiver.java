@@ -22,7 +22,6 @@ public class Receiver implements Runnable {
                 if (response.equals("quit")) {
                     break;
                 }
-
             }
         } catch (IOException e) {
             System.err.println("IOException caught: " + e);
@@ -30,6 +29,7 @@ public class Receiver implements Runnable {
         } finally {
             System.out.println("Receiver chiuso.");
             this.sender.interrupt();
+            // COME MAI NON VIENE CHIUSO ANCHE IL RECEIVER, MA SOLO IL SENDER?
         }
     }
 }
