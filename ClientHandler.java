@@ -34,11 +34,12 @@ public class ClientHandler implements Runnable {
                             break;
                         case "help":
                             to.println("Comandi del servizio:");
-                            to.println("'list': mostra l'elenco di tutti i conti correnti presenti.\nUtilizzo: 'list'");
-                            to.println("'open': permette di creare un conto corrente.\nUtilizzo: 'open' 'nome conto' 'bilancio iniziale'");
-                            to.println("'transfer': permette di transferire denaro da un conto ad un altro.\nUtilizzo: 'transfer' 'somma' 'nome conto 1' 'nome conto 2'");
-                            to.println("'transfer_i': permette di transferire denaro da un conto ad un altro, ma in maniera interattiva.\nUtilizzo: 'transfer' 'nome conto 1' 'nome conto 2'");
+                            to.println("'list': mostra l'elenco di tutti i conti correnti presenti.\n\tUtilizzo: 'list'");
+                            to.println("'open': permette di creare un conto corrente.\n\tUtilizzo: 'open' 'nome conto' 'bilancio iniziale'");
+                            to.println("'transfer': permette di transferire denaro da un conto ad un altro.\n\tUtilizzo: 'transfer' 'somma' 'nome conto 1' 'nome conto 2'");
+                            to.println("'transfer_i': permette di transferire denaro da un conto ad un altro, ma in maniera interattiva.\n\tUtilizzo: 'transfer' 'nome conto 1' 'nome conto 2'");
                             to.println("Una volta aperta la sessione interattiva, si possono usare i comandi:\n\t':move': per spostare denaro. Utilizzo ':move' 'somma'\n\t':end': per terminare la sessione interattiva. Utilizzo: ':end'");
+                            to.println("'quit': termina l'esecuzione del programma.\n\tUtilizzo: 'quit'");
                             to.print("");
                             break;
                         case "open":
