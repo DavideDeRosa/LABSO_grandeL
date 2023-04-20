@@ -44,14 +44,18 @@ public class ClientHandler implements Runnable {
                             break;
                         case "open":
                             if (parts.length == 3) {
-                                String accountName = parts[1];
-                                if(!contoPresente(accountName.toLowerCase())){
-                                    double accountAmount = Double.parseDouble(parts[2]);
-                                    to.println("Account creato!\tNome: " + accountName + "\tBilancio iniziale: " + accountAmount);
-                                    BankAccount b = new BankAccount(accountName, accountAmount);
-                                    bankAccounts.add(b);
-                                }else{
-                                    to.println("Esiste già un conto con questo nome! Conto non creato correttamente.");
+                                try{
+                                    String accountName = parts[1];
+                                    if(!contoPresente(accountName.toLowerCase())){
+                                        double accountAmount = Double.parseDouble(parts[2]);
+                                        to.println("Account creato!\tNome: " + accountName + "\tBilancio iniziale: " + accountAmount);
+                                        BankAccount b = new BankAccount(accountName, accountAmount);
+                                        bankAccounts.add(b);
+                                    }else{
+                                        to.println("Esiste già un conto con questo nome! Conto non creato correttamente.");
+                                    }
+                                }catch(Exception e){
+                                    to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
                                 }
                             } else {
                                 to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
