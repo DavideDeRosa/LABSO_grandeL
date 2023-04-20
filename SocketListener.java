@@ -19,6 +19,9 @@ public class SocketListener implements Runnable {
     public void run() {
         try {
             this.server.setSoTimeout(5000); // CHIEDERE AL PROF SPIEGAZIONI ULTERIORI
+                                                    // IL TIMER SERVE PER CONTROLLARE SE IL SOCKET VIENE TERMINATO, DATO CHE ALTRIMENTI
+                                                    // LO CONTROLLEREBBE SOLTANTO ALL'APERTURA DI UN NUOVO SOCKET. CONTROLLA OGNI 5 SECONDI
+                                                    // SE C'E' STATO UN INTERRUPT E SE C'E' STATO CHIUDERE IL TUTTO!
             while (!Thread.interrupted()) {
                 try {
                     System.out.println("In attesa di un nuovo client...");

@@ -30,6 +30,7 @@ public class Receiver implements Runnable {
             System.out.println("Receiver chiuso.");
             this.sender.interrupt();
             // COME MAI NON VIENE CHIUSO ANCHE IL RECEIVER, MA SOLO IL SENDER?
+            // IL RECEIVER VIENE CHIUSO ALLA FINE DEL RUN!
         }
     }
 }
