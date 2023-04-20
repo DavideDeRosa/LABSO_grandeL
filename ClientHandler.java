@@ -35,6 +35,7 @@ public class ClientHandler implements Runnable {
                         case "help":
                             to.println("Comandi del servizio:");
                             to.println("'list': mostra l'elenco di tutti i conti correnti presenti.\n\tUtilizzo: 'list'");
+                            to.println("'list nome conto': mostra l'elenco di tutte le transazioni effettuate in un conto corrente.\n\tUtilizzo: 'list' 'nome conto'");
                             to.println("'open': permette di creare un conto corrente.\n\tUtilizzo: 'open' 'nome conto' 'bilancio iniziale'");
                             to.println("'transfer': permette di transferire denaro da un conto ad un altro.\n\tUtilizzo: 'transfer' 'somma' 'nome conto 1' 'nome conto 2'");
                             to.println("'transfer_i': permette di transferire denaro da un conto ad un altro, ma in maniera interattiva.\n\tUtilizzo: 'transfer' 'nome conto 1' 'nome conto 2'");
@@ -62,39 +63,68 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "list":
-                           if(!bankAccounts.isEmpty()){
-                            String list = "";
-                            for (BankAccount b : bankAccounts) {
-                                list = list + b.toString();
+                            if (parts.length == 1) { // LIST COMANDO NORMALE
+                                if(!bankAccounts.isEmpty()){
+                                    String list = "";
+                                    for (BankAccount b : bankAccounts) {
+                                        list = list + b.toString();
+                                    }
+        
+                                    to.println(list);
+                                   }else{
+                                    to.println("Lista vuota!");
+                                   }
+                            }else if(parts.length == 2){ // LIST 'NOMECONTOCORRENTE' COMANDO CHE TI DA L'ELENCO DELLE TRANSAZIONI DI QUEL CONTO
+                                if(!bankAccounts.isEmpty()){
+                                    String name = parts[1];
+                                    BankAccount b = getAccountByName(name.toLowerCase());
+                                    if(b == null){
+                                        to.println("Il conto corrente non esiste o non è corretto!");
+                                    }else{
+                                        if(b.getTransactions().isEmpty()){
+                                            to.println("Il conto corrente non ha transazioni!");
+                                        }else{
+                                            String transactions = "Transazioni conto corrente " + b.getName() + " :\n";
+                                            for (Transaction t : b.getTransactions()) {
+                                                transactions = transactions + "\t" + t.toString() + "\n";
+                                            }
+                
+                                            to.println(transactions);
+                                        }
+                                    }
+                                   }else{
+                                    to.println("Non sono presenti conti correnti!");
+                                   }
+                            }else{
+                                to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
                             }
-
-                            to.println(list);
-                           }else{
-                            to.println("Lista vuota!");
-                           }
                             break;
                         case "transfer":
                             if (parts.length == 4) {
-                                double amount = Double.parseDouble(parts[1]);
-                                String name1 = parts[2];
-                                String name2 = parts[3];
-                                BankAccount b1 = getAccountByName(name1.toLowerCase());
-                                BankAccount b2 = getAccountByName(name2.toLowerCase());
-                                if(b1 == null || b2 == null){
-                                    to.println("Uno dei due conti o entrambi i conti non sono corretti!");
-                                }else{
-                                    if(b1.transfer(amount, b2)){
-                                        to.println("Operazione effettuata con successo! Trasferiti " + amount + " dal conto " + name1 + " al conto " + name2 + "!");
+                                try{
+                                    double amount = Double.parseDouble(parts[1]);
+                                    String name1 = parts[2];
+                                    String name2 = parts[3];
+                                    BankAccount b1 = getAccountByName(name1.toLowerCase());
+                                    BankAccount b2 = getAccountByName(name2.toLowerCase());
+                                    if(b1 == null || b2 == null){
+                                        to.println("Uno dei due conti o entrambi i conti non sono corretti!");
                                     }else{
-                                        to.println("Transazione negata, bilancio non sufficiente al trasferimento!");
-                                    }   
+                                        if(b1.transfer(amount, b2)){
+                                            to.println("Operazione effettuata con successo! Trasferiti " + amount + " dal conto " + name1 + " al conto " + name2 + "!");
+                                        }else{
+                                            to.println("Transazione negata, bilancio non sufficiente al trasferimento!");
+                                        }   
+                                    }
+                                }catch(Exception e){
+                                    to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
                                 }
                             } else {
                                 to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
                             }
                             break;
                         case "transfer_i":
-                                
+                                // TO-DO
                                 break;
                         default:
                             to.println("Comando sconosciuto! Scrivere 'help' per ulteriori informazioni.");
