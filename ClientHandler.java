@@ -37,7 +37,7 @@ public class ClientHandler implements Runnable {
                                 to.println("'transfer_i': permette di transferire denaro da un conto ad un altro, ma in maniera interattiva.\n\tUtilizzo: 'transfer' 'nome conto 1' 'nome conto 2'");
                                 to.println("Una volta aperta la sessione interattiva, si possono usare i comandi:\n\t':move': per spostare denaro. Utilizzo ':move' 'somma'\n\t':end': per terminare la sessione interattiva. Utilizzo: ':end'");
                                 break;
-                            case ":move": //
+                            case ":move":
                                 if(parts.length == 2){
                                     try{
                                         double amount = Double.parseDouble(parts[1]);
@@ -53,8 +53,8 @@ public class ClientHandler implements Runnable {
                                     to.println("Comando scritto in maniera errata! Scrivere ':help' per ulteriori informazioni.");
                                 }
                                 break;
-                            case ":end": // CONCETTUALMENTE DOVREBBE ANDARE, DA CONTROLLARE
-                                to.println("Stato di transazione interattiva concluso tra il conto " + b1.getName() + " ed il conto " + b2.getName() + ":");
+                            case ":end":
+                                to.println("Stato di transazione interattiva concluso tra il conto " + b1.getName() + " ed il conto " + b2.getName());
                                 state = false;
                                 r.end_transfer_i(b1, b2);
                                 b1 = null;

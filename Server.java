@@ -10,10 +10,11 @@ public class Server {
             return;
         }
 
-        int port = Integer.parseInt(args[0]);
         Scanner userInput = new Scanner(System.in);
 
         try {
+            int port = Integer.parseInt(args[0]);
+        
             ServerSocket server = new ServerSocket(port);
             Thread serverThread = new Thread(new SocketListener(server));
             serverThread.start();
@@ -31,9 +32,8 @@ public class Server {
                 return;
             }
             System.out.println("Main thread terminato.");
-        } catch (IOException e) {
-            System.err.println("IOException caught: " + e);
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Utilizzo: java Server <port>");
         } finally {
             userInput.close();
         }

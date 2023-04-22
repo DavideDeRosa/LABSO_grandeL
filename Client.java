@@ -1,11 +1,5 @@
-import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
-
-/*
-    QUANDO CHIUDIAMO IL SERVER, I VARI CLIENT NON HANNO UN MESSAGGIO DI CHIUSURA O DI TERMINAZIONE DEL SERVIZIO. E' UNA COSA VOLUTA O VA FIXATA?
-    UNA VOLTA CHIUSO IL SERVER, MANDATI DUE MESSAGGI VIENE TERMINATO IL CLIENT. CAPIRE SE IL COMPORTAMENTO VA CAMBIATO.
-    RISPOSTA: E' INDIFFERENTE, PER IL PROF VA BENE ANCHE SE LO LASCIAMO NELLO STATO ATTUALE
- */
 
 public class Client {
     public static void main(String[] args) {
@@ -13,12 +7,9 @@ public class Client {
             System.err.println("Utilizzo: java Client <host> <port>");
             return;
         }
-
-        String host = args[0]; // QUANDO DO UN IP VALIDO MA NON CON UN SERVER IN ASCOLTO IL PROGRAMMA NON FA NULLA, COME MAI?
-                               // NON ERA VERO, QUANDO DAI UN IP SBAGLIATO DA UN ECCEZIONE CHE VA GESTITA!
-        int port = Integer.parseInt(args[1]);
-
         try {
+            String host = args[0];
+            int port = Integer.parseInt(args[1]);
             Socket s = new Socket(host, port);
             System.out.println("Connesso al server");
             System.out.println("Benvenuto nel servizio bancario grandeL!");
@@ -38,9 +29,10 @@ public class Client {
                 return;
             }
 
-        } catch (IOException e) {
-            System.err.println("IOException caught: " + e);
-            e.printStackTrace();
+        } catch (ConnectException e) {
+            System.err.println("Server non disponibile!");
+        } catch(Exception e){
+            System.err.println("Utilizzo: java Client <host> <port>");
         }
     }
 }
