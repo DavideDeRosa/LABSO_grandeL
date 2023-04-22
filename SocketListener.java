@@ -8,7 +8,7 @@ import java.util.Vector;
 public class SocketListener implements Runnable {
     ServerSocket server;
     ArrayList<Thread> children = new ArrayList<>();
-    private static Vector<BankAccount> bankAccounts;
+    private Vector<BankAccount> bankAccounts;
 
     public SocketListener(ServerSocket server) {
         this.server = server;
@@ -28,7 +28,7 @@ public class SocketListener implements Runnable {
                     Socket s = this.server.accept();
                     if (!Thread.interrupted()) {
                         System.out.println("Client connesso");
-                        Thread handlerThread = new Thread(new ClientHandler(s));
+                        Thread handlerThread = new Thread(new ClientHandler(s, bankAccounts));
                         handlerThread.start();
                         this.children.add(handlerThread);
                     } else {
@@ -54,10 +54,6 @@ public class SocketListener implements Runnable {
             child.interrupt();
         }
 
-    }
-
-    public static Vector<BankAccount> getBankAccounts(){
-        return bankAccounts;
     }
 
 }

@@ -9,9 +9,9 @@ public class ClientHandler implements Runnable {
     Socket s;
     Vector<BankAccount> bankAccounts;
 
-    public ClientHandler(Socket s) {
+    public ClientHandler(Socket s, Vector<BankAccount> b) {
         this.s = s;
-        bankAccounts = SocketListener.getBankAccounts();
+        bankAccounts = b;
     }
 
     @Override
