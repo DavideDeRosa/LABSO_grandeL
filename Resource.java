@@ -63,6 +63,29 @@ public class Resource {
         return bool;
     }
 
+    public synchronized void start_transfer_i(BankAccount b1, BankAccount b2) throws InterruptedException {
+        while(busyAccounts.contains(b1) || busyAccounts.contains(b2)){
+            wait();
+        }
+
+        busyAccounts.put(b1.getName(), b1);
+        busyAccounts.put(b2.getName(), b2);
+
+        notifyAll();
+    }
+
+    public synchronized boolean transfer_i(BankAccount b1, BankAccount b2, double amount) throws InterruptedException {
+        return b1.transfer(amount, b2);
+    }
+
+    public synchronized void end_transfer_i(BankAccount b1, BankAccount b2) throws InterruptedException {
+        
+        busyAccounts.remove(b1.getName());
+        busyAccounts.remove(b2.getName());
+
+        notifyAll();
+    }
+
     public Vector<BankAccount> getBankAccounts(){
         return bankAccounts;
     }
