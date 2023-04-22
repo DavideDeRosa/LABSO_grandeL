@@ -45,6 +45,16 @@ public class Resource {
         bankAccounts.add(b);
     }
 
+    public synchronized void close(BankAccount b)){
+        while(busyAccounts.contains(b)) {
+            wait();
+        }
+
+        bankAccounts.remove(b);
+
+        notifyAll();
+    }
+
     public synchronized boolean transfer(BankAccount b1, BankAccount b2, double amount) throws InterruptedException {
         while(busyAccounts.contains(b1) || busyAccounts.contains(b2)){
             wait();

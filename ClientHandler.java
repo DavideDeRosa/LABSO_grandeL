@@ -170,6 +170,19 @@ public class ClientHandler implements Runnable {
                                     to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
                                 }
                                 break;
+                            case "close":
+                                if(parts.length == 2) {
+                                    String name = parts[1];
+                                    if(contoPresente(name)) {
+                                        r.close(getAccountByName(name));
+                                        to.println("Conto chiuso correttamente.")
+                                    } else {
+                                        to.println("Conto corrente errato o inesistente!");
+                                    }
+                                } else {
+                                    to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
+                                }
+                                break;
                             default:
                                 to.println("Comando sconosciuto! Scrivere 'help' per ulteriori informazioni.");
                         }
