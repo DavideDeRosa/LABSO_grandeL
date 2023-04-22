@@ -3,16 +3,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class SocketListener implements Runnable {
     ServerSocket server;
     ArrayList<Thread> children = new ArrayList<>();
-    private Vector<BankAccount> bankAccounts;
 
     public SocketListener(ServerSocket server) {
         this.server = server;
-        bankAccounts = new Vector<BankAccount>();
     }
 
     @Override
@@ -22,13 +19,14 @@ public class SocketListener implements Runnable {
                                                     // IL TIMER SERVE PER CONTROLLARE SE IL SOCKET VIENE TERMINATO, DATO CHE ALTRIMENTI
                                                     // LO CONTROLLEREBBE SOLTANTO ALL'APERTURA DI UN NUOVO SOCKET. CONTROLLA OGNI 5 SECONDI
                                                     // SE C'E' STATO UN INTERRUPT E SE C'E' STATO CHIUDERE IL TUTTO!
+            Resource r = new Resource();
             while (!Thread.interrupted()) {
                 try {
                     System.out.println("In attesa di un nuovo client...");
                     Socket s = this.server.accept();
                     if (!Thread.interrupted()) {
                         System.out.println("Client connesso");
-                        Thread handlerThread = new Thread(new ClientHandler(s, bankAccounts));
+                        Thread handlerThread = new Thread(new ClientHandler(s, r));
                         handlerThread.start();
                         this.children.add(handlerThread);
                     } else {

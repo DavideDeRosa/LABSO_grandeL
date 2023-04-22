@@ -13,7 +13,7 @@ public class BankAccount {
         transactions = new Vector<Transaction>();
     }
 
-    public boolean transfer(double amount, BankAccount b){
+    public synchronized boolean transfer(double amount, BankAccount b){
         if(balance >= amount){
             balance = balance - amount;
             b.setBalance(b.getBalance() + amount);

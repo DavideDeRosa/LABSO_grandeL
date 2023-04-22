@@ -2,16 +2,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.Vector;
 
 public class ClientHandler implements Runnable {
 
     Socket s;
-    Vector<BankAccount> bankAccounts;
+    Resource r;
 
-    public ClientHandler(Socket s, Vector<BankAccount> b) {
+    public ClientHandler(Socket s, Resource r) {
         this.s = s;
-        bankAccounts = b;
+        this.r = r;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class ClientHandler implements Runnable {
                         case "quit":
                             closed = true;
                             break;
-                        case "help":
+                        case "help": // TO-DO: Modificare se ci sono stati cambiamenti!!!
                             to.println("Comandi del servizio:");
                             to.println("'list': mostra l'elenco di tutti i conti correnti presenti.\n\tUtilizzo: 'list'");
                             to.println("'list nome conto': mostra l'elenco di tutte le transazioni effettuate in un conto corrente.\n\tUtilizzo: 'list' 'nome conto'");
@@ -51,7 +50,7 @@ public class ClientHandler implements Runnable {
                                         double accountAmount = Double.parseDouble(parts[2]);
                                         to.println("Account creato!\tNome: " + accountName + "\tBilancio iniziale: " + accountAmount);
                                         BankAccount b = new BankAccount(accountName, accountAmount);
-                                        bankAccounts.add(b);
+                                        r.open(b);
                                     }else{
                                         to.println("Esiste già un conto con questo nome! Conto non creato correttamente.");
                                     }
@@ -64,18 +63,13 @@ public class ClientHandler implements Runnable {
                             break;
                         case "list":
                             if (parts.length == 1) { // LIST COMANDO NORMALE
-                                if(!bankAccounts.isEmpty()){
-                                    String list = "";
-                                    for (BankAccount b : bankAccounts) {
-                                        list = list + b.toString();
-                                    }
-        
-                                    to.println(list);
+                                if(!r.getBankAccounts().isEmpty()){
+                                    to.println(r.list());
                                    }else{
                                     to.println("Lista vuota!");
                                    }
                             }else if(parts.length == 2){ // LIST 'NOMECONTOCORRENTE' COMANDO CHE TI DA L'ELENCO DELLE TRANSAZIONI DI QUEL CONTO
-                                if(!bankAccounts.isEmpty()){
+                                if(!r.getBankAccounts().isEmpty()){
                                     String name = parts[1];
                                     BankAccount b = getAccountByName(name.toLowerCase());
                                     if(b == null){
@@ -84,12 +78,7 @@ public class ClientHandler implements Runnable {
                                         if(b.getTransactions().isEmpty()){
                                             to.println("Il conto corrente non ha transazioni!");
                                         }else{
-                                            String transactions = "Transazioni conto corrente " + b.getName() + " :\n";
-                                            for (Transaction t : b.getTransactions()) {
-                                                transactions = transactions + "\t" + t.toString() + "\n";
-                                            }
-                
-                                            to.println(transactions);
+                                            to.println(r.listT(b));
                                         }
                                     }
                                    }else{
@@ -110,7 +99,7 @@ public class ClientHandler implements Runnable {
                                     if(b1 == null || b2 == null){
                                         to.println("Uno dei due conti o entrambi i conti non sono corretti!");
                                     }else{
-                                        if(b1.transfer(amount, b2)){
+                                        if(r.transfer(b1, b2, amount)){
                                             to.println("Operazione effettuata con successo! Trasferiti " + amount + " dal conto " + name1 + " al conto " + name2 + "!");
                                         }else{
                                             to.println("Transazione negata, bilancio non sufficiente al trasferimento!");
@@ -141,11 +130,13 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             System.err.println("ClientHandler: IOException caught: " + e);
             e.printStackTrace();
+        }catch(InterruptedException e){
+            e.printStackTrace();
         }
     }
 
     private boolean contoPresente(String name){
-        for (BankAccount b : bankAccounts) {
+        for (BankAccount b : r.getBankAccounts()) {
             if(b.getName().toLowerCase().equals(name)){
                 return true;
             }
@@ -154,7 +145,7 @@ public class ClientHandler implements Runnable {
     }
 
     private BankAccount getAccountByName(String name){
-        for (BankAccount b : bankAccounts) {
+        for (BankAccount b : r.getBankAccounts()) {
             if(b.getName().toLowerCase().equals(name)){
                 return b;
             }
