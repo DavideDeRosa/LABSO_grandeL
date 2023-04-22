@@ -175,7 +175,7 @@ public class ClientHandler implements Runnable {
                                     String name = parts[1];
                                     if(contoPresente(name)) {
                                         r.close(getAccountByName(name));
-                                        to.println("Conto chiuso correttamente.")
+                                        to.println("Conto chiuso correttamente.");
                                     } else {
                                         to.println("Conto corrente errato o inesistente!");
                                     }

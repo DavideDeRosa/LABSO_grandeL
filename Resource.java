@@ -45,7 +45,7 @@ public class Resource {
         bankAccounts.add(b);
     }
 
-    public synchronized void close(BankAccount b)){
+    public synchronized void close(BankAccount b) throws InterruptedException {
         while(busyAccounts.contains(b)) {
             wait();
         }
