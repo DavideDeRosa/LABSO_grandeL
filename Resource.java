@@ -11,17 +11,17 @@ public class Resource {
         busyAccounts = new ConcurrentHashMap<String, BankAccount>();
     }
 
-    public synchronized String list() throws InterruptedException {
-        while(!busyAccounts.isEmpty()){
-            wait();
-        }
+    public synchronized String list() throws InterruptedException { // CHIEDERE SE VA BENE GESTIRE SENZA WHILE
+        //while(!busyAccounts.isEmpty()){
+        //    wait();
+        //}
 
         String list = "";
         for (BankAccount b : bankAccounts) {
             list = list + b.toString();
         }
 
-        notifyAll();
+        //notifyAll();
 
         return list;
     }
