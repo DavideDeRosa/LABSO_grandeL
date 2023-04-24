@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ClientHandler implements Runnable {
 
@@ -10,22 +12,26 @@ public class ClientHandler implements Runnable {
     boolean state;
     BankAccount b1;
     BankAccount b2;
+    Scanner from;
+    PrintWriter to;
+    Timer timer;
+    boolean closed;
 
     public ClientHandler(Socket s, Resource r) {
         this.s = s;
         this.r = r;
         state = false;
+        closed = false;
     }
 
     @Override
     public void run() {
         try {
-            Scanner from = new Scanner(s.getInputStream());
-            PrintWriter to = new PrintWriter(s.getOutputStream(), true);
+            from = new Scanner(s.getInputStream());
+            to = new PrintWriter(s.getOutputStream(), true);
 
             System.out.println("Thread " + Thread.currentThread() + " in ascolto...");
 
-            boolean closed = false;
             while (!closed) {
                 String request = from.nextLine();
                 if (!Thread.interrupted()) {
@@ -33,6 +39,10 @@ public class ClientHandler implements Runnable {
                     String[] parts = request.split(" ");
                     if(state){
                         switch(parts[0]){
+                            case "quit":
+                                closed = true;
+                                closeAll();
+                                break;
                             case ":help":
                                 to.println("'transfer_i': permette di transferire denaro da un conto ad un altro, ma in maniera interattiva.\n\tUtilizzo: 'transfer' 'nome conto 1' 'nome conto 2'");
                                 to.println("Una volta aperta la sessione interattiva, si possono usare i comandi:\n\t':move': per spostare denaro. Utilizzo ':move' 'somma'\n\t':end': per terminare la sessione interattiva. Utilizzo: ':end'");
@@ -59,6 +69,7 @@ public class ClientHandler implements Runnable {
                                 r.end_transfer_i(b1, b2);
                                 b1 = null;
                                 b2 = null;
+                                timer.cancel();
                                 break;
                             default:
                                 to.println("Comando sconosciuto! Scrivere ':help' per ulteriori informazioni.");
@@ -162,8 +173,11 @@ public class ClientHandler implements Runnable {
                                             state = true;
                                             r.start_transfer_i(b1, b2);
                                             to.println("Stato di transazione interattiva attivato tra il conto " + b1.getName() + " ed il conto " + b2.getName() + ":");
+                                            to.println("Transazione interattiva valida per 1 minuto...");
+                                            startTimer();
                                         }
                                     }catch(Exception e){
+                                        to.println(e.getMessage());
                                         to.println("Comando scritto in maniera errata! Scrivere 'help' per ulteriori informazioni.");
                                     }
                                 } else {
@@ -220,6 +234,36 @@ public class ClientHandler implements Runnable {
             }
         }
         return null;
+    }
+
+    private void closeAll() throws InterruptedException {
+        to.println("Stato di transazione interattiva concluso tra il conto " + b1.getName() + " ed il conto " + b2.getName());
+        state = false;
+        r.end_transfer_i(b1, b2);
+        b1 = null;
+        b2 = null;
+        timer.cancel();
+    }
+
+    private void startTimer(){
+        
+        timer = new Timer();
+
+        TimerTask tt = new TimerTask() {
+            public void run(){
+                try {
+                    to.println("Stato di transazione interattiva concluso tra il conto " + b1.getName() + " ed il conto " + b2.getName());
+                    state = false;
+                    r.end_transfer_i(b1, b2);
+                    b1 = null;
+                    b2 = null;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        timer.schedule(tt, 60000);
     }
 
 }

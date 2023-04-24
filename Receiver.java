@@ -26,6 +26,10 @@ public class Receiver implements Runnable {
         } catch (IOException e) {
             System.err.println("IOException caught: " + e);
             e.printStackTrace();
+        } catch(Exception e){
+            System.out.println("Server non raggiungibile, premere il tasto invio per terminare l'esecuzione."); 
+            // VEDERE LE MODIFICHE (dava un exception col thread in riga 20 quando chiudevo il server prima dei client, 
+            // cosi non da l'errore ma da quel messaggio)
         } finally {
             System.out.println("Receiver chiuso.");
             this.sender.interrupt();

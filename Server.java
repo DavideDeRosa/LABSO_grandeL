@@ -35,6 +35,7 @@ public class Server {
             System.err.println("Utilizzo: java Server <port>");
         } finally {
             userInput.close();
+            System.exit(0); // CAPIRE SE VA BENE, ALTRIMENTI A VOLTE NON TERMINA L'ESECUZIONE DEL SERVER!
         }
         
     }
