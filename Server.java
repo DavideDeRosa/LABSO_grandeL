@@ -13,7 +13,7 @@ public class Server {
 
         try {
             int port = Integer.parseInt(args[0]);
-        
+
             ServerSocket server = new ServerSocket(port);
             Thread serverThread = new Thread(new SocketListener(server));
             serverThread.start();
@@ -37,6 +37,5 @@ public class Server {
             userInput.close();
             System.exit(0); // CAPIRE SE VA BENE, ALTRIMENTI A VOLTE NON TERMINA L'ESECUZIONE DEL SERVER!
         }
-        
     }
 }

@@ -2,36 +2,36 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Resource {
-    
+
     private Vector<BankAccount> bankAccounts;
     private ConcurrentHashMap<String, BankAccount> busyAccounts;
 
-    public Resource(){
+    public Resource() {
         bankAccounts = new Vector<BankAccount>();
         busyAccounts = new ConcurrentHashMap<String, BankAccount>();
     }
 
-    public synchronized String list() throws InterruptedException { // CHIEDERE SE VA BENE GESTIRE SENZA WHILE
-        //while(!busyAccounts.isEmpty()){
-        //    wait();
-        //}
+    public synchronized String list() { // CHIEDERE SE VA BENE GESTIRE SENZA WHILE
+        // while(!busyAccounts.isEmpty()){
+        // wait();
+        // }
 
         String list = "";
         for (BankAccount b : bankAccounts) {
             list = list + b.toString();
         }
 
-        //notifyAll();
+        // notifyAll();
 
         return list;
     }
 
     public synchronized String listT(BankAccount b) throws InterruptedException {
-        while(busyAccounts.contains(b)){
+        while (busyAccounts.contains(b)) {
             wait();
         }
 
-        String transactions = "Transazioni conto corrente " + b.getName() + " :\n";
+        String transactions = "";
         for (Transaction t : b.getTransactions()) {
             transactions = transactions + "\t" + t.toString() + "\n";
         }
@@ -41,12 +41,12 @@ public class Resource {
         return transactions;
     }
 
-    public synchronized void open(BankAccount b){
+    public synchronized void open(BankAccount b) {
         bankAccounts.add(b);
     }
 
     public synchronized void close(BankAccount b) throws InterruptedException {
-        while(busyAccounts.contains(b)) {
+        while (busyAccounts.contains(b)) {
             wait();
         }
 
@@ -56,7 +56,7 @@ public class Resource {
     }
 
     public synchronized boolean transfer(BankAccount b1, BankAccount b2, double amount) throws InterruptedException {
-        while(busyAccounts.contains(b1) || busyAccounts.contains(b2)){
+        while (busyAccounts.contains(b1) || busyAccounts.contains(b2)) {
             wait();
         }
 
@@ -74,7 +74,7 @@ public class Resource {
     }
 
     public synchronized void start_transfer_i(BankAccount b1, BankAccount b2) throws InterruptedException {
-        while(busyAccounts.contains(b1) || busyAccounts.contains(b2)){
+        while (busyAccounts.contains(b1) || busyAccounts.contains(b2)) {
             wait();
         }
 
@@ -89,14 +89,14 @@ public class Resource {
     }
 
     public synchronized void end_transfer_i(BankAccount b1, BankAccount b2) throws InterruptedException {
-        
+
         busyAccounts.remove(b1.getName());
         busyAccounts.remove(b2.getName());
 
         notifyAll();
     }
 
-    public Vector<BankAccount> getBankAccounts(){
+    public Vector<BankAccount> getBankAccounts() {
         return bankAccounts;
     }
 

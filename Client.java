@@ -12,7 +12,7 @@ public class Client {
             int port = Integer.parseInt(args[1]);
             Socket s = new Socket(host, port);
             System.out.println("Connesso al server");
-            System.out.println("Benvenuto nel servizio bancario grandeL!");
+            System.out.println("Benvenuto nel servizio bancario grandeL!\n");
 
             Thread sender = new Thread(new Sender(s));
             Thread receiver = new Thread(new Receiver(s, sender));
@@ -31,7 +31,7 @@ public class Client {
 
         } catch (ConnectException e) {
             System.err.println("Server non disponibile!");
-        } catch(Exception e){
+        } catch (Exception e) {
             System.err.println("Utilizzo: java Client <host> <port>");
         }
     }
