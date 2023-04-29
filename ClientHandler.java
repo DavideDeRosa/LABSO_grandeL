@@ -174,7 +174,7 @@ public class ClientHandler implements Runnable {
                                             to.println(
                                                     "Attenzione!\nUno dei due conti e' inesistente o non e' scritto in maniera corretta.\n");
                                         }
-                                        if (acc1 == acc2) {
+                                        if (acc1 == acc2) { // NON SI PUO FARE COME SOTTO acc1.equals(acc2)???
                                             to.println(
                                                     "Attenzione!\nNon e' possibile compiere un trasferimento nello stesso conto.\n");
                                         } else {
