@@ -17,7 +17,7 @@ public class BankAccount {
         if(balance >= amount){
             balance = balance - amount;
             b.setBalance(b.getBalance() + amount);
-            this.addTransaction(new Transaction(-(amount), b.getName()));   //AMMONTARE IN VALORE ASSOLUTO O DECIDIAMO DI TENERE NEGATIVO PER CHI FA IL TRASFERIMENTO?
+            this.addTransaction(new Transaction(-(amount), b.getName()));
             System.out.println("Transazione effettuata da " + name + ": " + lastTransaction);
             b.addTransaction(new Transaction(amount, this.getName()));
             return true;

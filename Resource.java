@@ -11,17 +11,11 @@ public class Resource {
         busyAccounts = new ConcurrentHashMap<String, BankAccount>();
     }
 
-    public synchronized String list() { // CHIEDERE SE VA BENE GESTIRE SENZA WHILE
-        // while(!busyAccounts.isEmpty()){
-        // wait();
-        // }
-
+    public synchronized String list() {
         String list = "";
         for (BankAccount b : bankAccounts) {
             list = list + b.toString();
         }
-
-        // notifyAll();
 
         return list;
     }

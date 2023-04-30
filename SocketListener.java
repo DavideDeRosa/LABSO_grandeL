@@ -5,19 +5,19 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 public class SocketListener implements Runnable {
-    ServerSocket server;
-    ArrayList<Thread> children = new ArrayList<>();
+    private ServerSocket server;
+    private ArrayList<Thread> children = new ArrayList<>();
+    private volatile Resource r; //VOLATILE: SERVE PER SCRIVERE SEMPRE SULLA STESSA STRUTTURA DATI E NON SU UNA COPIA LOCALE DI UN THREAD
 
     public SocketListener(ServerSocket server) {
         this.server = server;
+        r = new Resource();
     }
 
     @Override
     public void run() {
         try {
             this.server.setSoTimeout(5000);
-
-            Resource r = new Resource();
             
             while (!Thread.interrupted()) {
                 try {

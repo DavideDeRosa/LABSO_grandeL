@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Sender implements Runnable {
 
-    Socket s;
+    private Socket s;
 
     public Sender(Socket s) {
         this.s = s;

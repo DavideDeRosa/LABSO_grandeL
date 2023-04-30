@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class Receiver implements Runnable {
 
-    Socket s;
-    Thread sender;
+    private  Socket s;
+    private Thread sender;
 
     public Receiver(Socket s, Thread sender) {
         this.s = s;

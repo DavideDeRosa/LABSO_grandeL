@@ -7,15 +7,15 @@ import java.util.TimerTask;
 
 public class ClientHandler implements Runnable {
 
-    Socket s;
-    Resource r;
-    boolean state;
-    BankAccount b1;
-    BankAccount b2;
-    Scanner from;
-    PrintWriter to;
-    Timer timer;
-    boolean closed;
+    private Socket s;
+    private Resource r;
+    private boolean state;
+    private BankAccount b1;
+    private BankAccount b2;
+    private  Scanner from;
+    private PrintWriter to;
+    private Timer timer;
+    private boolean closed;
 
     public ClientHandler(Socket s, Resource r) {
         this.s = s;
