@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Receiver implements Runnable {
 
-    private  Socket s;
+    private Socket s;
     private Thread sender;
 
     public Receiver(Socket s, Thread sender) {

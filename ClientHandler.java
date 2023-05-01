@@ -10,9 +10,9 @@ public class ClientHandler implements Runnable {
     private Socket s;
     private Resource r;
     private boolean state;
-    private BankAccount b1;
-    private BankAccount b2;
-    private  Scanner from;
+    private String b1;
+    private String b2;
+    private Scanner from;
     private PrintWriter to;
     private Timer timer;
     private boolean closed;
@@ -55,7 +55,7 @@ public class ClientHandler implements Runnable {
                                         double amount = Double.parseDouble(parts[1]);
                                         if (r.transfer_i(b1, b2, amount)) {
                                             to.println("Operazione effettuata con successo!\nTrasferiti " + amount
-                                                    + " dal conto " + b1.getName() + " al conto " + b2.getName()
+                                                    + " dal conto " + b1 + " al conto " + b2
                                                     + ".\n");
                                         } else {
                                             to.println(
@@ -63,20 +63,20 @@ public class ClientHandler implements Runnable {
                                         }
                                     } catch (Exception e) {
                                         to.println(
-                                                "Comando scritto in maniera errata!\n:move <1000>.");
+                                                "Comando scritto in maniera errata!\n:move <1000>.\n");
                                     }
                                 } else {
                                     to.println(
-                                            "Comando scritto in maniera errata!\n:move <1000>.");
+                                            "Comando scritto in maniera errata!\n:move <1000>.\n");
                                 }
                                 break;
                             case ":end":
-                                to.println("Stato di transazione interattiva concluso tra il conto " + b1.getName()
-                                        + " ed il conto " + b2.getName() + "\n");
+                                to.println("Stato di transazione interattiva concluso tra il conto " + b1
+                                        + " ed il conto " + b2 + "\n");
                                 state = false;
                                 r.end_transfer_i(b1, b2);
-                                b1 = null;
-                                b2 = null;
+                                b1 = "";
+                                b2 = "";
                                 timer.cancel();
                                 break;
                             default:
@@ -109,48 +109,44 @@ public class ClientHandler implements Runnable {
                                 if (parts.length == 3) {
                                     try {
                                         String accountName = parts[1];
-                                        if (!contoPresente(accountName.toLowerCase())) {
-                                            double accountAmount = Double.parseDouble(parts[2]);
+                                        double accountAmount = Double.parseDouble(parts[2]);
+                                        if (r.open(accountName, accountAmount)) {
                                             to.println(
                                                     "Account creato!\nNome: " + accountName + "\tBilancio iniziale: "
                                                             + accountAmount + "\n");
-                                            BankAccount b = new BankAccount(accountName, accountAmount);
-                                            r.open(b);
                                         } else {
                                             to.println(
                                                     "Esiste già un conto con questo nome!\nConto non creato correttamente.\n");
                                         }
                                     } catch (Exception e) {
                                         to.println(
-                                                "Comando scritto in maniera errata!\nopen <nome_conto> <1000>.\n");
+                                            "Comando scritto in maniera errata!\nopen <nome_conto> <1000>.\n");
                                     }
                                 } else {
                                     to.println(
                                             "Comando scritto in maniera errata!\nopen <nome_conto> <1000>.\n");
                                 }
                                 break;
-                            case "list":
-                                if (parts.length == 1) { // LIST COMANDO NORMALE
-                                    if (!r.getBankAccounts().isEmpty()) {
+                                case "list":
+                                if (parts.length == 1) {
+                                    if (!r.list().equals("")) {
                                         to.println(r.list());
                                     } else {
                                         to.println(
                                                 "Attenzione!\nLa struttura dati non contiene alcuno conto corrente.\n");
                                     }
-                                } else if (parts.length == 2) { // LIST 'NOMECONTOCORRENTE' COMANDO CHE TI DA L'ELENCO
-                                                                // DELLE TRANSAZIONI DI QUEL CONTO
-                                    if (!r.getBankAccounts().isEmpty()) {
+                                } else if (parts.length == 2) {
+                                    if (!r.list().equals("")) {
                                         String name = parts[1];
-                                        BankAccount b = getAccountByName(name.toLowerCase());
-                                        if (b == null) {
+                                        if (!r.contoPresente(name)) {
                                             to.println(
                                                     "Attenzione!\nConto corrente non esistente o non scritto in maniera errata.\n");
                                         } else {
-                                            if (b.getTransactions().isEmpty()) {
+                                            if (r.listT(name).equals("")) {
                                                 to.println(
-                                                        "Attenzione!\nIl conto corrente non ha ancora effettuato alcuna transazione.\n");
+                                                    "Attenzione!\nIl conto corrente non ha ancora effettuato alcuna transazione.\n");
                                             } else {
-                                                to.println(r.listT(b));
+                                                to.println(r.listT(name));
                                             }
                                         }
                                     } else {
@@ -168,17 +164,16 @@ public class ClientHandler implements Runnable {
                                         double amount = Double.parseDouble(parts[1]);
                                         String name1 = parts[2];
                                         String name2 = parts[3];
-                                        BankAccount acc1 = getAccountByName(name1.toLowerCase());
-                                        BankAccount acc2 = getAccountByName(name2.toLowerCase());
-                                        if (acc1 == null || acc2 == null) {
+                                        
+                                        if (!r.contoPresente(name1) || !r.contoPresente(name2)) {
                                             to.println(
                                                     "Attenzione!\nUno dei due conti e' inesistente o non e' scritto in maniera corretta.\n");
                                         }
-                                        if (acc1 == acc2) { // NON SI PUO FARE COME SOTTO acc1.equals(acc2)???
+                                        if (name1.equalsIgnoreCase(name2)) { 
                                             to.println(
                                                     "Attenzione!\nNon e' possibile compiere un trasferimento nello stesso conto.\n");
                                         } else {
-                                            if (r.transfer(acc1, acc2, amount)) {
+                                            if (r.transfer(name1, name2, amount)) {
                                                 to.println("Operazione effettuata con successo!\nTrasferiti " + amount
                                                         + " dal conto " + name1 + " al conto " + name2 + ".\n");
                                             } else {
@@ -198,22 +193,21 @@ public class ClientHandler implements Runnable {
                             case "transfer_i":
                                 if (parts.length == 3) {
                                     try {
-                                        String name1 = parts[1];
-                                        String name2 = parts[2];
-                                        b1 = getAccountByName(name1.toLowerCase());
-                                        b2 = getAccountByName(name2.toLowerCase());
-                                        if (b1 == null || b2 == null) {
+                                        b1 = parts[1];
+                                        b2 = parts[2];
+                                        
+                                        if (!r.contoPresente(b1) || !r.contoPresente(b2)) {
                                             to.println(
                                                     "Attenzione!\nUno dei due conti e' inesistente o non e' scritto in maniera corretta.\n");
                                         }
-                                        if (b1.equals(b2)) {
+                                        if (b1.equalsIgnoreCase(b2)) {
                                             to.println(
                                                     "Attenzione!\nNon e' possibile compiere un trasferimento nello stesso conto.\n");
                                         } else {
                                             state = true;
                                             r.start_transfer_i(b1, b2);
                                             to.println("Stato di transazione interattiva attivato tra il conto "
-                                                    + b1.getName() + " ed il conto " + b2.getName() + ":");
+                                                    + b1 + " ed il conto " + b2 + ":");
                                             to.println("Transazione interattiva valida per 1 minuto...\n");
                                             startTimer();
                                         }
@@ -230,9 +224,8 @@ public class ClientHandler implements Runnable {
                             case "close":
                                 if (parts.length == 2) {
                                     String name = parts[1];
-                                    if (contoPresente(name)) {
-                                        r.close(getAccountByName(name));
-                                        to.println("Conto chiuso correttamente!");
+                                    if (r.close(name)) {
+                                        to.println("Conto chiuso correttamente!\n");
                                     } else {
                                         to.println(
                                                 "Attenzione!\nConto corrente e' inesistente o non e' scritto in maniera corretta.\n");
@@ -243,7 +236,7 @@ public class ClientHandler implements Runnable {
                                 }
                                 break;
                             default:
-                                to.println("Comando non riconosciuto!\ndDigita help per saperne di piu'.\n");
+                                to.println("Comando non riconosciuto!\nDigita help per saperne di piu'.\n");
                         }
                     }
                 } else {
@@ -262,31 +255,13 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private boolean contoPresente(String name) {
-        for (BankAccount b : r.getBankAccounts()) {
-            if (b.getName().toLowerCase().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private BankAccount getAccountByName(String name) {
-        for (BankAccount b : r.getBankAccounts()) {
-            if (b.getName().toLowerCase().equals(name)) {
-                return b;
-            }
-        }
-        return null;
-    }
-
     private void closeAll() throws InterruptedException {
-        to.println("Stato di transazione interattiva concluso tra il conto " + b1.getName() + " ed il conto "
-                + b2.getName() + "\n");
+        to.println("Stato di transazione interattiva concluso tra il conto " + b1 + " ed il conto "
+                + b2 + "\n");
         state = false;
         r.end_transfer_i(b1, b2);
-        b1 = null;
-        b2 = null;
+        b1 = "";
+        b2 = "";
         timer.cancel();
     }
 
@@ -297,12 +272,12 @@ public class ClientHandler implements Runnable {
         TimerTask tt = new TimerTask() {
             public void run() {
                 try {
-                    to.println("Stato di transazione interattiva concluso tra il conto " + b1.getName()
-                            + " ed il conto " + b2.getName() + "\n");
+                    to.println("Stato di transazione interattiva concluso tra il conto " + b1
+                            + " ed il conto " + b2 + "\n");
                     state = false;
                     r.end_transfer_i(b1, b2);
-                    b1 = null;
-                    b2 = null;
+                    b1 = "";
+                    b2 = "";
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
