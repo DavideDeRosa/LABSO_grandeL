@@ -11,6 +11,9 @@ public class Resource {
         busyAccounts = new ConcurrentHashMap<String, BankAccount>();
     }
 
+    /*
+     * Stampa la lista dei conti correnti
+     */
     public synchronized String list() {
         String list = "";
         if(!bankAccounts.isEmpty()){
@@ -22,6 +25,9 @@ public class Resource {
         return list;
     }
 
+    /*
+     * Stampa la lista delle transazioni di un singolo conto corrente
+     */
     public synchronized String listT(String name) throws InterruptedException {
         BankAccount b = getAccountByName(name);
 
@@ -41,6 +47,9 @@ public class Resource {
         return transactions;
     }
 
+    /*
+     * Permette l'apertura di un conto corrente (se già presente, non viene creato)
+     */
     public synchronized boolean open(String name, double amount) {
         if(contoPresente(name)){
             return false;
@@ -52,6 +61,9 @@ public class Resource {
         return true;
     }
 
+    /*
+     * Permette la chiusura di un conto corrente
+     */
     public synchronized boolean close(String name) throws InterruptedException {
         if(!contoPresente(name)){
             return false;
@@ -68,6 +80,9 @@ public class Resource {
         return true;
     }
 
+    /*
+     * Permette il trasferimento da un conto ad un altro
+     */
     public synchronized boolean transfer(String name1, String name2, double amount) throws InterruptedException {
         BankAccount b1 = getAccountByName(name1);
         BankAccount b2 = getAccountByName(name2);
@@ -89,6 +104,9 @@ public class Resource {
         return bool;
     }
 
+    /*
+     * Permette di iniziare la sessione interattiva tra due conti
+     */
     public synchronized void start_transfer_i(String name1, String name2) throws InterruptedException {
         BankAccount b1 = getAccountByName(name1);
         BankAccount b2 = getAccountByName(name2);
@@ -103,6 +121,9 @@ public class Resource {
         notifyAll();
     }
 
+    /*
+     * Effettua i trasferimenti nella sessione interattiva
+     */
     public synchronized boolean transfer_i(String name1, String name2, double amount) throws InterruptedException {
         BankAccount b1 = getAccountByName(name1);
         BankAccount b2 = getAccountByName(name2);
@@ -110,6 +131,9 @@ public class Resource {
         return b1.transfer(amount, b2);
     }
 
+    /*
+     * Permette di chiudere la sessione interattiva tra due conti
+     */
     public synchronized void end_transfer_i(String name1, String name2) throws InterruptedException {
         BankAccount b1 = getAccountByName(name1);
         BankAccount b2 = getAccountByName(name2);
@@ -120,6 +144,9 @@ public class Resource {
         notifyAll();
     }
 
+    /*
+     * Controlla la presenza di un conto corrente nella struttura dati
+     */
     public boolean contoPresente(String name) {
         for (BankAccount b : bankAccounts) {
             if (b.getName().equalsIgnoreCase(name)) {
@@ -129,6 +156,9 @@ public class Resource {
         return false;
     }
 
+    /*
+     * Restituisce il conto corrente tramite l'identificativo nome del conto
+     */
     public BankAccount getAccountByName(String name) {
         for (BankAccount b : bankAccounts) {
             if (b.getName().equalsIgnoreCase(name)) {

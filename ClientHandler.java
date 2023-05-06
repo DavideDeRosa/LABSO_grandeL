@@ -37,7 +37,14 @@ public class ClientHandler implements Runnable {
                 if (!Thread.interrupted()) {
                     System.out.println("Richiesta: " + request);
                     String[] parts = request.split(" ");
+                    /*
+                     * Viene prima determinato quale set di comandi leggere, tramite la variabile state
+                     * Successivamente i due switch gestiscono i diversi comandi implementati
+                     */
                     if (state) {
+                        /*
+                        * Comandi inerenti alla sessione interattiva
+                        */
                         switch (parts[0]) {
                             case "quit":
                                 closed = true;
@@ -46,7 +53,7 @@ public class ClientHandler implements Runnable {
                             case ":help":
                                 to.println(
                                         "Una volta aperta la sessione interattiva, si possono usare i comandi:\n"
-                                                + ":move: per spostare denaro.\n\tUtilizzo :move <1000>.\n "
+                                                + ":move: per spostare denaro.\n\tUtilizzo :move <1000>.\n"
                                                 + ":end: per terminare la sessione interattiva.\n\tUtilizzo: :end.\n");
                                 break;
                             case ":move":
@@ -83,11 +90,14 @@ public class ClientHandler implements Runnable {
                                 to.println("Comando non riconosciuto! Scrivere :help per saperne di piu'.\n");
                         }
                     } else {
+                        /*
+                        * Comandi generali del programma
+                        */
                         switch (parts[0]) {
                             case "quit":
                                 closed = true;
                                 break;
-                            case "help": // TO-DO: Modificare se ci sono stati cambiamenti!!!
+                            case "help":
                                 to.println(
                                         "Comandi del servizio:");
                                 to.println(
@@ -204,8 +214,8 @@ public class ClientHandler implements Runnable {
                                             to.println(
                                                     "Attenzione!\nNon e' possibile compiere un trasferimento nello stesso conto.\n");
                                         } else {
-                                            state = true;
                                             r.start_transfer_i(b1, b2);
+                                            state = true;
                                             to.println("Stato di transazione interattiva attivato tra il conto "
                                                     + b1 + " ed il conto " + b2 + ":");
                                             to.println("Transazione interattiva valida per 1 minuto...\n");
@@ -255,6 +265,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /*
+     * Permette di chiudere la sessione interattiva in caso di comando "quit" durante la sessione stessa
+     */
     private void closeAll() throws InterruptedException {
         to.println("Stato di transazione interattiva concluso tra il conto " + b1 + " ed il conto "
                 + b2 + "\n");
@@ -265,6 +278,9 @@ public class ClientHandler implements Runnable {
         timer.cancel();
     }
 
+    /*
+     * Imposta un timer all'avvio della sessione interattiva, che permette la chiusura della sessione entro 1 minuto dal suo avvio
+     */
     private void startTimer() {
 
         timer = new Timer();
