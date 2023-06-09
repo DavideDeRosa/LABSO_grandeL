@@ -13,8 +13,13 @@ public class Server {
 
         try {
             int port = Integer.parseInt(args[0]);
-
+            /*
+            Viene creato il ServerSocket, per ricevere le richieste
+            */
             ServerSocket server = new ServerSocket(port);
+            /*
+            Viene creato un Thread che gestisce le richieste
+            */
             Thread serverThread = new Thread(new SocketListener(server));
             serverThread.start();
 

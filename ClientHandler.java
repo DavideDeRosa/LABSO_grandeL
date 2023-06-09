@@ -38,12 +38,12 @@ public class ClientHandler implements Runnable {
                     System.out.println("Richiesta: " + request);
                     String[] parts = request.split(" ");
                     /*
-                     * Viene prima determinato quale set di comandi leggere, tramite la variabile state
-                     * Successivamente i due switch gestiscono i diversi comandi implementati
-                     */
+                    Viene prima determinato quale set di comandi leggere, tramite la variabile state
+                    Successivamente i due switch gestiscono i diversi comandi implementati
+                    */
                     if (state) {
                         /*
-                        * Comandi inerenti alla sessione interattiva
+                        Comandi inerenti alla sessione interattiva
                         */
                         switch (parts[0]) {
                             case "quit":
@@ -91,7 +91,7 @@ public class ClientHandler implements Runnable {
                         }
                     } else {
                         /*
-                        * Comandi generali del programma
+                        Comandi generali del programma
                         */
                         switch (parts[0]) {
                             case "quit":
@@ -150,7 +150,7 @@ public class ClientHandler implements Runnable {
                                         String name = parts[1];
                                         if (!r.contoPresente(name)) {
                                             to.println(
-                                                    "Attenzione!\nConto corrente non esistente o non scritto in maniera errata.\n");
+                                                    "Attenzione!\nConto corrente non esistente o scritto in maniera errata.\n");
                                         } else {
                                             if (r.listT(name).equals("")) {
                                                 to.println(
@@ -165,7 +165,7 @@ public class ClientHandler implements Runnable {
                                     }
                                 } else {
                                     to.println(
-                                            "Attenzione!\nConto corrente non esistente o non scritto in maniera errata.\n");
+                                            "Attenzione!\nConto corrente non esistente o scritto in maniera errata.\n");
                                 }
                                 break;
                             case "transfer":
@@ -266,8 +266,8 @@ public class ClientHandler implements Runnable {
     }
 
     /*
-     * Permette di chiudere la sessione interattiva in caso di comando "quit" durante la sessione stessa
-     */
+    Permette di chiudere la sessione interattiva in caso di comando "quit" durante la sessione stessa
+    */
     private void closeAll() throws InterruptedException {
         to.println("Stato di transazione interattiva concluso tra il conto " + b1 + " ed il conto "
                 + b2 + "\n");
@@ -279,8 +279,8 @@ public class ClientHandler implements Runnable {
     }
 
     /*
-     * Imposta un timer all'avvio della sessione interattiva, che permette la chiusura della sessione entro 1 minuto dal suo avvio
-     */
+    Imposta un timer all'avvio della sessione interattiva, che permette la chiusura della sessione entro 1 minuto dal suo avvio
+    */
     private void startTimer() {
 
         timer = new Timer();

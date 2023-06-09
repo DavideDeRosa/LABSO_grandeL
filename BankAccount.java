@@ -13,6 +13,9 @@ public class BankAccount {
         transactions = new Vector<Transaction>();
     }
 
+    /*
+    Permette il trasferimento da un conto ad un altro
+    */
     public synchronized boolean transfer(double amount, BankAccount b){
         if(balance >= amount){
             balance = balance - amount;

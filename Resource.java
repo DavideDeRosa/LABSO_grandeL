@@ -12,8 +12,8 @@ public class Resource {
     }
 
     /*
-     * Stampa la lista dei conti correnti
-     */
+    Stampa la lista dei conti correnti
+    */
     public synchronized String list() {
         String list = "";
         if(!bankAccounts.isEmpty()){
@@ -26,8 +26,8 @@ public class Resource {
     }
 
     /*
-     * Stampa la lista delle transazioni di un singolo conto corrente
-     */
+    Stampa la lista delle transazioni di un singolo conto corrente
+    */
     public synchronized String listT(String name) throws InterruptedException {
         BankAccount b = getAccountByName(name);
 
@@ -48,8 +48,8 @@ public class Resource {
     }
 
     /*
-     * Permette l'apertura di un conto corrente (se già presente, non viene creato)
-     */
+    Permette l'apertura di un conto corrente (se già presente, non viene creato)
+    */
     public synchronized boolean open(String name, double amount) {
         if(contoPresente(name)){
             return false;
@@ -62,8 +62,8 @@ public class Resource {
     }
 
     /*
-     * Permette la chiusura di un conto corrente
-     */
+    Permette la chiusura di un conto corrente
+    */
     public synchronized boolean close(String name) throws InterruptedException {
         if(!contoPresente(name)){
             return false;
@@ -81,8 +81,8 @@ public class Resource {
     }
 
     /*
-     * Permette il trasferimento da un conto ad un altro
-     */
+    Permette il trasferimento da un conto ad un altro
+    */
     public synchronized boolean transfer(String name1, String name2, double amount) throws InterruptedException {
         BankAccount b1 = getAccountByName(name1);
         BankAccount b2 = getAccountByName(name2);
@@ -105,8 +105,8 @@ public class Resource {
     }
 
     /*
-     * Permette di iniziare la sessione interattiva tra due conti
-     */
+    Permette di iniziare la sessione interattiva tra due conti
+    */
     public synchronized void start_transfer_i(String name1, String name2) throws InterruptedException {
         BankAccount b1 = getAccountByName(name1);
         BankAccount b2 = getAccountByName(name2);
@@ -122,8 +122,8 @@ public class Resource {
     }
 
     /*
-     * Effettua i trasferimenti nella sessione interattiva
-     */
+    Effettua i trasferimenti nella sessione interattiva
+    */
     public synchronized boolean transfer_i(String name1, String name2, double amount) throws InterruptedException {
         BankAccount b1 = getAccountByName(name1);
         BankAccount b2 = getAccountByName(name2);
@@ -132,8 +132,8 @@ public class Resource {
     }
 
     /*
-     * Permette di chiudere la sessione interattiva tra due conti
-     */
+    Permette di chiudere la sessione interattiva tra due conti
+    */
     public synchronized void end_transfer_i(String name1, String name2) throws InterruptedException {
         BankAccount b1 = getAccountByName(name1);
         BankAccount b2 = getAccountByName(name2);
@@ -145,8 +145,8 @@ public class Resource {
     }
 
     /*
-     * Controlla la presenza di un conto corrente nella struttura dati
-     */
+    Controlla la presenza di un conto corrente nella struttura dati
+    */
     public boolean contoPresente(String name) {
         for (BankAccount b : bankAccounts) {
             if (b.getName().equalsIgnoreCase(name)) {
@@ -157,8 +157,8 @@ public class Resource {
     }
 
     /*
-     * Restituisce il conto corrente tramite l'identificativo nome del conto
-     */
+    Restituisce il conto corrente tramite l'identificativo nome del conto
+    */
     public BankAccount getAccountByName(String name) {
         for (BankAccount b : bankAccounts) {
             if (b.getName().equalsIgnoreCase(name)) {

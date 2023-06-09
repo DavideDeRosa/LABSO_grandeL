@@ -23,6 +23,9 @@ public class Sender implements Runnable {
                     to.println("quit");
                     break;
                 }
+                /*
+                Viene inviata la comunicazione al Server
+                */
                 to.println(request);
                 if (request.equals("quit")) {
                     break;

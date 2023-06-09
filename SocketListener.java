@@ -22,9 +22,15 @@ public class SocketListener implements Runnable {
             while (!Thread.interrupted()) {
                 try {
                     System.out.println("In attesa di un nuovo client...");
+                    /*
+                    Viene creato il socket, accettando la richiesta del Client
+                    */
                     Socket s = this.server.accept();
                     if (!Thread.interrupted()) {
                         System.out.println("Client connesso");
+                        /*
+                        Viene creato e viene avviato un Thread per ogni connessione stabilita
+                        */
                         Thread handlerThread = new Thread(new ClientHandler(s, r));
                         handlerThread.start();
                         this.children.add(handlerThread);
